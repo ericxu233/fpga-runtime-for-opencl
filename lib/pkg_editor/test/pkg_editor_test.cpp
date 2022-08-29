@@ -230,7 +230,7 @@ TEST(sample_file, read_readonly) {
   CHECK(pkg);
   CHECK(acl_pkg_section_exists(pkg, ACL_PKG_SECTION_HASH, &data_size));
   CHECK_EQUAL(sizeof(hw), data_size);
-  char data_result[sizeof(hw)];
+  char data_result[sizeof(hw) + 1];
   CHECK(acl_pkg_read_section(pkg, ACL_PKG_SECTION_HASH, data_result,
                              data_size + 1));
   CHECK_EQUAL(0, strcmp(data_result, hw));
