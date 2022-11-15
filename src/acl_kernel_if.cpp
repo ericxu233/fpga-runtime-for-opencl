@@ -1048,6 +1048,7 @@ int acl_kernel_if_post_pll_config_init(acl_kernel_if *kern) {
     ACL_KERNEL_IF_DEBUG_MSG(kern,
                             "Read CSR version from kernel 0: Version = %u\n",
                             kern->csr_version);
+    printf("CSR version is: %d\n", version);
     if (kern->csr_version < 5) {
       // Register addresses are pushed back since previous versions
       // doesn't have the start register
@@ -1056,6 +1057,7 @@ int acl_kernel_if_post_pll_config_init(acl_kernel_if *kern) {
   } else {
     kern->csr_version = 0;
   }
+  printf("CRA address offset is: %d", kern->cra_address_offset);
 
   // If environment variables set, configure the profile hardware
   // start/stop cycle registers for *every* kernel.  The runtime can then
@@ -1294,6 +1296,7 @@ void acl_kernel_if_launch_kernel_on_custom_sof(
   }
 
   // backwards compatibility for version prior to 2023.1
+  printf("Writing 1 to start reg\n");
   if (kern->csr_version < CSR_VERSION_ID) {
     unsigned int new_csr = 0;
     acl_kernel_cra_read(kern, accel_id, KERNEL_OFFSET_CSR, &new_csr);
@@ -1304,6 +1307,7 @@ void acl_kernel_if_launch_kernel_on_custom_sof(
   }
   // IRQ handler takes care of the completion event through
   // acl_kernel_if_update_status()
+  printf("Write done!\n");
 }
 
 void acl_kernel_if_launch_kernel(acl_kernel_if *kern,
@@ -1339,6 +1343,7 @@ static void acl_kernel_if_update_status_query(acl_kernel_if *kern,
   // Read the accelerator's status register
   unsigned int csr = 0;
   acl_kernel_cra_read(kern, accel_id, KERNEL_OFFSET_CSR, &csr);
+  printf("Updating query reading CSR...\n");
 
   // Ignore non-status bits.
   // Required by Option 3 wrappers which now have a version info in
